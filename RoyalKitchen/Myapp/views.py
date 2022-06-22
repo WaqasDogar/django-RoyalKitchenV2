@@ -133,7 +133,8 @@ def Approve(request,dataid,cusid):
 
     from twilio.rest import Client
     try:
-       
+        account_sid = 'AC871cc7a045146bbfea852642ac31dc8e' 
+        auth_token = 'a5c7352367ba7b67cb2bd8645a60508f' 
         client = Client(account_sid, auth_token) 
         
         message = client.messages.create( 
@@ -190,7 +191,8 @@ def Reject(request,dataid,cusid):
 
     from twilio.rest import Client
     try:
-        
+        account_sid = 'AC871cc7a045146bbfea852642ac31dc8e' 
+        auth_token = 'a5c7352367ba7b67cb2bd8645a60508f' 
         client = Client(account_sid, auth_token) 
         
         message = client.messages.create( 
