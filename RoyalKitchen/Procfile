@@ -1,1 +1,1 @@
-web: gunicorn Myapp.wsgi --log-file -
+web: gunicorn RoyalKitchen.wsgi --log-file -
