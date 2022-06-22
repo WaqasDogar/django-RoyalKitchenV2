@@ -1,0 +1,222 @@
+{% load static %}
+{% load tag_library %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Royal Kitchen</title>
+
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+
+	<link rel="stylesheet" href="{% static 'Myapp/css/bootstrap.min.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/animate.min.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/font-awesome.min.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/nivo-lightbox.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/nivo_themes/default/default.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/style.css'%}">
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,500' rel='stylesheet' type='text/css'>
+
+	<style>
+		.badge {
+  padding-left: 9px;
+  padding-right: 9px;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 12px;
+}
+
+.label-warning[href],
+.badge-warning[href] {
+  background-color: #c67605;
+}
+#lblCartCount {
+    font-size: 12px;
+    background: #ff0000;
+    color: #fff;
+    padding: 0 5px;
+    vertical-align: top;
+    margin-left: -10px; 
+}
+	</style>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script> 
+		$(document).ready(function(){
+		setInterval(function(){
+			  $("#here").load(window.location.href + " #here" );
+		}, 3000);
+		});
+		</script>
+	
+</head>
+
+<body>
+
+<!-- preloader section -->
+<section class="preloader">
+	<div class="sk-spinner sk-spinner-pulse"></div>
+</section>
+
+<!-- navigation section -->
+<section class="navbar navbar-default navbar-fixed-top" role="navigation" style="background-color: #FFB30E;">
+	<div class="container" style="color: white;">
+		<div class="navbar-header">
+			<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="icon icon-bar"></span>
+				<span class="icon icon-bar"></span>
+				<span class="icon icon-bar"></span>
+			</button>
+			<a href="{% url 'index' %}" style="color: white;" class="navbar-brand">Royal Kitchen</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{% url 'index' %}" style="color: white;" class="smoothScroll">HOME</a></li>
+
+				{% if user.is_authenticated %}
+				
+				<li><a  href="{% url 'cart_detail' %}" style="color: white;"><i class="fa" style="font-size:24px">&#xf07a;</i>
+					<span class='badge badge-warning' id='lblCartCount'> {{request.session.cart|length}}  </span></a></li>
+				{% endif %}
+
+				{% if user.is_authenticated %}
+				<li><a href="{% url 'userorder' %}" style="color: white;"class="smoothScroll" style="color:rgb(53, 153, 53);">ORDERS</a></li>
+				{% endif %}
+
+				{% if user.is_authenticated %}
+				<li><a href="{% url 'useraccount' %}" style="color: white;" class="smoothScroll">MY ACCOUNT</a></li>
+				{% if user.is_authenticated %}
+				<li><a href="{% url 'useraccount' %}"> <img src="{{profile.Image.url}}" alt="Upload Profile Pic" style="height:50px; width: 50px;border-radius: 10%;"  alt=""></a></li>
+				<li><a href="{% url 'useraccount' %}"><h5 style="color: white;"> {{request.user.first_name}} {{request.user.last_name}}</h5></a></li>
+				  {% endif %}
+				<a href="{% url 'logout' %} " class="btn btn-info" style="color: #FFB30E;margin-top: 10px;background-color: white;" >LogOut</a>
+				{% else %}
+				<a href="{% url 'signin' %}"style="color: white;" class="btn btn-success" style="margin-top:2%;">USER LOGIN</a>
+				<a href="{% url 'signin' %}"style="color: white;" class="btn btn-info" style="margin-top:2%;">VENDOR LOGIN</a>
+		    	<!--<a href="{% url 'signin' %}" class="btn btn-success" style="margin-top:2%;">LogIn</a> -->	
+				{% endif %}
+
+				{% if user.is_staff %}
+				<a href="{% url 'myadmin' %}" style="color: white;" class="btn btn-success" style="margin-top:2%;">MyAdmin</a>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</section>
+
+
+<!-- Location section -->
+<section class="parallax-section" id="here">
+	<div class="container">
+		<div class="row" style="margin-top:8%;margin-bottom: 30%;">
+			<h1 style="position:center;">{{msg}}</h1>
+				{% for data in Order reversed %}
+                <h2 style="color:Green; ">Order#{{data.id}} </h2>
+				<h2  style="color:rgb(98, 188, 188);">| Restaurant:{{data.RestuarantID|id_to_restuarantnamebyordrs}} |</h2>
+                <h2  style="color:red;">| Total Bill:{{data.GrandTotal}} Rs |</h2>
+                <h2 style="color:rgb(181, 181, 8);">| Status: {{data.status}} |</h2>
+                <h2 style="color:rgb(98, 188, 188);">{{data.EntryDate}} </h2>
+
+				<div class="table-responsive" >
+                <table  class="table table-bordered" style="padding-bottom: 50%;">
+                   <thead style="margin-left:40%;">
+                         <tr >
+                             <th scope="col">Food</th>
+							 <th scope="col">Size</th>
+                             <th scope="col">Quantity</th>
+                             <th scope="col">Price</th>
+							 <th scope="col">Rating</th>
+                         </tr>
+                     </thead>
+                     {% for pro in OrderProducts %}
+                     {% if pro.orderID == data %}
+                     <tbody>
+                          
+                         <tr>
+                             <td >  {{pro.Foodname}} </td>
+							 <td>  {{pro.FoodSize}} </td>
+                             <td>  {{pro.Foodquantity|floatformat:"0"}} </td>
+                             <td>  {{pro.Foodprice}} </td>
+							 {% if data.status == "Received" %}
+							 {% if pro.orderID|ratingstatuscheck:pro.FoodID %}
+							 <td>
+								<form method="post">
+									{% csrf_token %}
+									<input hidden type="text" name="pid" value="{{pro.FoodID}}">
+									<input hidden type="text" name="oid" value="{{pro.orderID}}">
+								<select name="rate" class="form-control" onChange="form.submit();" style="color: rgb(181, 181, 8);">
+									<option >Choose</option>
+									<option value="5">★★★★★</option>
+									<option value="4">★★★★</option>
+									<option value="3">★★★</option>
+									<option value="2">★★</option>
+									<option value="1">★</option>
+								</select>
+							</form>
+							 </td>
+							 {% else %}
+							 <td>
+								<h4 style="color: rgb(253, 161, 1);">
+								{% for i in pro.orderID|getorderproductsrating:pro.FoodID|times %}
+								★
+								{% endfor %}
+								</h4>
+								
+							 </td>
+							 {% endif %}
+							 {% else %}
+							 {% if data.status == "Approved" %}
+							 <td>
+								<a href="{% url 'orderstatus' data %}" class="btn btn-success">Received..?</a>
+							 </td>
+							 {% else %}
+							 <td>
+								Not Yet Approved
+							 </td>
+							 {% endif %}
+							 {% endif %}
+                         </tr>
+                        
+                     </tbody >
+                     {% endif %}
+                     {% endfor %}
+                     
+                 </table>
+				</div>
+				 <div style="margin-top:5%;"></div>
+                
+                 {% endfor %}
+
+		</div>
+	</div>
+</section>
+
+
+
+<!-- copyright section -->
+<section id="copyright">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<h3>Royal Kitchen</h3>
+				<p>Copyright © Royal Kitchen Restaurant              
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<!-- JAVASCRIPT JS FILES -->	
+<script src="{% static 'Myapp/js/jquery.js'%}"></script>
+<script src="{% static 'Myapp/js/bootstrap.min.js'%}"></script>
+<script src="{% static 'Myapp/js/jquery.parallax.js'%}"></script>
+<script src="{% static 'Myapp/js/smoothscroll.js'%}"></script>
+<script src="{% static 'Myapp/js/nivo-lightbox.min.js'%}"></script>
+<script src="{% static 'Myapp/js/wow.min.js'%}"></script>
+<script src="{% static 'Myapp/js/custom.js'%}"></script>
+
+
+</body>
+
+</html>

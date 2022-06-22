@@ -1,0 +1,194 @@
+{% load static %}
+{% load tag_library %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Royal Kitchen</title>
+
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+
+	<link rel="stylesheet" href="{% static 'Myapp/css/bootstrap.min.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/animate.min.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/font-awesome.min.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/nivo-lightbox.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/nivo_themes/default/default.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/style.css'%}">
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,500' rel='stylesheet' type='text/css'>
+	<style>
+		.badge {
+  padding-left: 9px;
+  padding-right: 9px;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 12px;
+}
+
+.label-warning[href],
+.badge-warning[href] {
+  background-color: #c67605;
+}
+#lblCartCount {
+    font-size: 12px;
+    background: #ff0000;
+    color: #fff;
+    padding: 0 5px;
+    vertical-align: top;
+    margin-left: -10px; 
+}
+	</style>
+</head>
+
+<body>
+
+<!-- preloader section -->
+<section class="preloader">
+	<div class="sk-spinner sk-spinner-pulse"></div>
+</section>
+
+<!-- navigation section -->
+<section class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="icon icon-bar"></span>
+				<span class="icon icon-bar"></span>
+				<span class="icon icon-bar"></span>
+			</button>
+			<a href="{% url 'index' %}" class="navbar-brand">Royal Kitchen</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{% url 'index' %}" class="smoothScroll">HOME</a></li>
+
+				{% if user.is_authenticated %}
+				<li><a class="smoothScroll">Logged in as {{ request.user }}</a></li>
+				<a href="{% url 'logout' %}" class="btn btn-danger" style="margin-top:2%;">LogOut</a>
+				{% else %}
+				<!-- <a href="{% url 'signin' %}" class="btn btn-success" style="margin-top:2%;">USER LOGIN</a>
+				<a href="{% url 'signin' %}" class="btn btn-info" style="margin-top:2%;">VENDOR LOGIN</a> -->
+		    	<!--<a href="{% url 'signin' %}" class="btn btn-success" style="margin-top:2%;">LogIn</a> -->	
+				{% endif %}
+
+				
+			</ul>
+		</div>
+	</div>
+</section>
+
+
+<section id="InputCustomer" class="parallax-section" >
+	<div class="container">
+		<div class="row" style="margin-top:8%;">
+			<div class="col-md-offset-1 col-md-10 col-sm-12 text-center">
+				
+				<h1 class="heading">Add Food </h1>
+				<hr>
+			</div>
+			<div class="col-md-offset-1 col-md-10 col-sm-12 wow fadeIn" data-wow-delay="0.7s">
+
+				<form method="POST" enctype="multipart/form-data" >
+
+					{% csrf_token %}
+					<div class="col-md-6 col-sm-6" style="margin-top: 1%;">
+						<label for="">Food Name</label>
+						<input name="foodname" type="text" class="form-control" id="user_username"  placeholder="Type food name...">
+					</div>
+
+					<div class="col-md-6 col-sm-6" style="margin-top: 1%;">
+						<label for="">Food Price</label>
+						<input name="price" type="text" class="form-control"  placeholder="Type food price..." >
+				  </div>
+					<div class="col-md-6 col-sm-6" style="margin-top: 1%;">
+						<label for="">Description</label>
+						<input name="desc" type="text" class="form-control"  placeholder="Type food description...">
+					</div>		  	
+					<div class="col-md-6 col-sm-6" style="margin-top: 1%;">
+						<label for="">Food Picture</label>
+						<input name="photo"  type=file accept=image/* class="form-control" placeholder="Food Picture" required>
+					</div>
+					<div class="col-md-6 col-sm-6" style="margin-top: 1%;">
+						<select class="form-control" name="size">
+							<option selected>Food Size</option>
+							<option value="Normal">Normal</option>
+							<option value="Large">Large</option>
+							<option value="Medium">Medium</option>
+							<option value="Small">Small</option>
+						</select>
+						</div>
+					<div class="col-md-6 col-sm-6" style="margin-top: 1%;">
+						<input style="background-color:rgb(147, 176, 176);" name="Save" type="submit" class="form-control" value="Save">
+					</div>			
+						
+				</div>
+				</form>
+			</div>
+			<br><br><br><br>
+			
+	</div>
+</section>
+
+<!-- gallery section -->
+<section id="gallery" class="parallax-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-offset-2 col-md-8 col-sm-12 text-center">
+				<h1 class="heading">Present Foods</h1>
+				<hr>
+			</div>
+			
+            {% for data in product %}
+			<div class="col-md-4 col-sm-4 wow fadeInUp" data-wow-delay="0.3s">
+                
+				<a href="{{data.Foodimage.url}}">
+                    <img src={{data.Foodimage.url}} alt="gallery img" height="300" width="200" style="border-radius: 10%;">
+                </a>
+                
+				<div>
+					<h3>{{data.Foodname}}</h3>
+					
+					<span>{{data.Foodprice}} Rs</span>
+					<span>{{data.Foodsize}}</span>
+
+				</div>
+
+				<a href="{% url 'updatepro' data.id  %}" class="btn btn-info">Edit </a>
+                <a href="{% url 'deletepro' data.id %}"  class="btn btn-danger" >Delete</a>
+          
+			</div>
+
+            {% endfor %}
+		</div>
+	</div>
+</section>	
+
+
+
+<!-- copyright section -->
+<section id="copyright">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<h3>Royal Kitchen</h3>
+				<p>Copyright © Royal Kitchen Restaurant              
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<!-- JAVASCRIPT JS FILES -->	
+<script src="{% static 'Myapp/js/jquery.js'%}"></script>
+<script src="{% static 'Myapp/js/bootstrap.min.js'%}"></script>
+<script src="{% static 'Myapp/js/jquery.parallax.js'%}"></script>
+<script src="{% static 'Myapp/js/smoothscroll.js'%}"></script>
+<script src="{% static 'Myapp/js/nivo-lightbox.min.js'%}"></script>
+<script src="{% static 'Myapp/js/wow.min.js'%}"></script>
+<script src="{% static 'Myapp/js/custom.js'%}"></script>
+
+</body>
+
+</html>

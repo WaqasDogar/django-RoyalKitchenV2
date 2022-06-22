@@ -1,0 +1,155 @@
+{% load static %}
+{% load tag_library %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Royal Kitchen Basket</title>
+      <link rel="stylesheet" type="text/css" href="{% static 'Myapp/css/cartcss.css'%}">
+
+      <script>
+        function validateForm(){
+          var x=document.forms["myForm"]["Address"].value;
+          var y=document.forms["myForm"]["Phone"].value;
+          if(x==""||x==null){
+            alert("Address must be filled out");
+            return false;
+          }
+          else if(y==""||y==null)
+          {
+            alert("Phone must be filled out");
+            return false;
+          }
+        }
+      </script>
+
+    </head>
+    
+    <body>
+        {% load cart_tag %}
+      <main>
+        <div class="basket">
+          <div class="basket-module">
+           <a href="{% url 'index' %}"><h2 style="background-color: white;color: #FFB30E;">Royal Kitchen'S</h2></a> 
+        <p>Cart Customer : {{ request.user }} <br> No of Items in CART : {{request.session.cart|length}}</p>
+          </div>
+          <div class="basket-labels">
+            <ul>
+              <li class="item item-heading">Item</li>
+              <li class="price">Price</li>
+              <li class="quantity">Quantity</li>
+              <li class="subtotal">Subtotal</li>
+            </ul>
+          </div>
+          {% for key,value in request.session.cart.items %}
+          <div class="basket-product">
+            <div class="item">
+              <div class="product-image">
+                <img src="{{value.image}}" alt="Placholder Image 2" class="product-frame">
+              </div>
+              <div class="product-details">
+                <h1><strong><span class="item-quantity"></span></strong>{{value.size}} {{value.name}} </h1>
+                <p>Product Code - {{ value.product_id }}</p>
+                <p>By {{ value.restuarantid| id_to_restuarantnamebycart }}</p>
+              </div>
+            </div>
+            <div class="price">{{value.price}}</div>
+            <div class="quantity">
+
+                 <a href="{% url 'item_increment' value.product_id value.restuarantid %}"><button type="button" style="width: 50%;">  + </button> </a>
+
+                 <br>
+                 <h4 style="margin-left: 20%;">{{value.quantity}} </h4> 
+
+                  {% if value.quantity > 1 %}
+
+                 <a href="{% url 'item_decrement' value.product_id value.restuarantid %}" ><button type="button" style="width: 50%;">-</button></a>
+
+                  {% else %}
+
+                  <a > <button onclick="return confirm('Decrement Not Allowed')" type="button" style="width: 50%;"> -  </button>  </a>
+
+                  {% endif %} 
+        
+            </div>
+            <div class="subtotal">{{ value.price|multiply:value.quantity }}</div>
+            <div class="remove">
+                <a href="{% url 'deletecartitem' value.product_id %}" class="btn " onclick="return confirm('Are you sure?')">
+                    <span >Remove</span>
+                  </a>
+            </div>
+          </div>
+
+          {% endfor %}
+        </div>
+        <aside>
+          <div class="summary" style="background-color:#FFB30E; color: white;" >
+
+            <div class="summary-total-items" style="color: white;"><span class="total-items"></span> 
+              <div class="summary-checkout">
+              <a href="{% url 'index' %}" >
+                 <button class="checkout-cta" style="background-color: white;color: #FFB30E;">Go to Restaurants</button>
+                 </a>
+            </div>
+          </div>
+            <div class="summary-subtotal">
+              <div class="subtotal-title" style="color: white;">Grand Total</div>
+              <div class="subtotal-value final-value" id="basket-subtotal" style="color: white;">{{ total }}</div>
+              <div class="summary-promo hide">
+                <div class="promo-title" style="color: white;">Promotion</div>
+                <div class="promo-value final-value" id="basket-promo"></div>
+              </div>
+            </div>
+            <div class="summary-delivery">
+              <select name="delivery-collection" class="summary-delivery-selection" style="background-color:white">
+                  <option value="0" selected="selected" style="color: white;">Select Collection or Delivery</option>
+                 <option value="collection" style="color: white;">Collection</option>
+                 <option value="first-class" style="color: white;">Royal Mail 1st Class</option>
+                 <option value="second-class" style="color: white;">Royal Mail 2nd Class</option>
+                 <option value="signed-for" style="color: white;">Royal Mail Special Delivery</option>
+              </select>
+
+<form name="myForm" action="/store" method="POST" onsubmit='return validateForm()' aria-required="true">
+  {% csrf_token %}
+              <div  class="summary-delivery" data-validate="Address is required">
+                <br>
+              <input   type="text" name="Address" placeholder="Delivery Address..." style="background-color:white;width: 97%; height: 25px; ">
+              <br><br>
+              <input   type="text" name="Phone" placeholder="Phone..." style="background-color:white; width: 97%; height: 25px;  ">
+              Example:031******89
+            </div>
+
+            <div class="subtotal-title"  style="color: white;">Note:</div><br>
+            <div class="summary-total-items" style="color: white;">Check your Email for order details after Checkout.(To get order details on phone or whatsapp text us "join ask-continent" to our whastapp: +14155238886 ) Thanks</div>
+
+            </div>
+           
+
+            {% if total > 0 %}
+            <div class="summary-checkout">
+                <a href="{% url 'store' %}" class="login100-form-btn">
+                    <button class="checkout-cta">Go to Secure Checkout</button> 
+                </a>    
+              </div>
+              
+</form>
+            <br>
+            <div class="summary-checkout">
+                <a href="{% url 'cart_clear' %}" class="login100-form-btn">
+                    <button class="checkout-cta">Clear Cart</button> 
+                  </a>               
+              </div>
+              {% endif %}
+          </div>
+        </aside>
+      </main>
+    </body>
+
+    <script src="{% static 'Myapp/js/cartjs.js'%}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    </html>
+    
+    

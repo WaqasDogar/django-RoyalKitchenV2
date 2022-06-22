@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Royal Kitchen</title>
+
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+<!--
+
+Template 2076 Royal Kitchen
+
+http://www.tooplate.com/view/2076-Royal Kitchen
+
+-->
+	<link rel="stylesheet" href="{% static 'Myapp/css/bootstrap.min.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/animate.min.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/font-awesome.min.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/nivo-lightbox.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/nivo_themes/default/default.css'%}">
+	<link rel="stylesheet" href="{% static 'Myapp/css/style.css'%}">
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,500' rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+<!-- navigation section -->
+<section class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="icon icon-bar"></span>
+				<span class="icon icon-bar"></span>
+				<span class="icon icon-bar"></span>
+			</button>
+			<a href="{% url 'Vendor'%}" class="navbar-brand">Royal Kitchen</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{% url 'Vendor'%}" class="smoothScroll">HOME</a></li>
+			</ul>
+		</div>
+	</div>
+</section>
+<br>
+<br>
+<br>
+
+<section id="InputCustomer" class="parallax-section">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-offset-1 col-md-10 col-sm-12 text-center">
+				
+				<h1 class="heading">Change Product</h1>
+				<hr>
+			</div>
+			<div class="col-md-offset-1 col-md-10 col-sm-12 wow fadeIn" data-wow-delay="0.7s">
+
+				<form method="POST" enctype="multipart/form-data" >
+
+					{% csrf_token %}
+
+					<div style="width: 50%; margin-left: 24%;">
+						<input name="name" type="text" class="form-control" id="id_name" placeholder="Product Name" style="margin-top: 1%;" value="{{ form.Foodname }}">
+				
+						<input name="price" type="text" class="form-control" id="id_price" placeholder="Product Price" style="margin-top: 1%;" value="{{ form.Foodprice }}">
+	
+
+							<select class="form-control" name="size" style="margin-top: 1%;" >
+								<option selected value="{{form.Foodsize}}">{{form.Foodsize}}</option>
+								<option value="Normal">Normal</option>
+								<option value="Large">Large</option>
+								<option value="Medium">Medium</option>
+								<option value="Small">Small</option>
+							</select>
+							
+						<input name="desc" type="text" class="form-control"  placeholder="Type food description..."  style="margin-top: 1%;" value="{{ form.Fooddescription }}">
+						
+						<input name="photo"  type="file" accept="image/*" class="form-control"  placeholder="Email" style="margin-top: 1%;" >
+
+						<input name="Save" type="submit" class="btn btn-info" value="Save" style="margin-top: 1%; width: 100%;" style="margin-top: 1%;">
+					</div>
+					
+				</form>
+			</div>
+			
+	</div>
+</section>
+</body>
+
+<!-- JAVASCRIPT JS FILES -->	
+<script src="{% static 'Myapp/js/jquery.js'%}"></script>
+<script src="{% static 'Myapp/js/bootstrap.min.js'%}"></script>
+<script src="{% static 'Myapp/js/jquery.parallax.js'%}"></script>
+<script src="{% static 'Myapp/js/smoothscroll.js'%}"></script>
+<script src="{% static 'Myapp/js/nivo-lightbox.min.js'%}"></script>
+<script src="{% static 'Myapp/js/wow.min.js'%}"></script>
+<script src="{% static 'Myapp/js/custom.js'%}"></script>
+
+</body>
+</html>
+
