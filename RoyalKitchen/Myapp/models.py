@@ -1,8 +1,6 @@
 # Create your models here.
 from distutils.command.upload import upload
-from email.policy import default
-from statistics import mode
-from tkinter import Image
+
 from django.contrib.auth.models import User
 from django.db import models
 
